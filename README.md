@@ -8,72 +8,67 @@ To write a program to implement the Decision Tree Regressor Model for Predicting
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-step 1. start
+1.Predict employee salary using features like experience and education with a decision tree.
 
-step 2. Load dataset and split into features (`X`) and target (`y`).
+2.Clean the data, handle missing values, and split into training and testing sets.
 
-step 3. Train a Decision Tree Regressor on `X` and `y`.
+3.Split data recursively at the best feature to minimize prediction error until stopping criteria are met.
 
-step 4. Predict salary values using the trained model.
+4.Train the decision tree on the training set to learn decision rules for salary prediction.
 
-step 5. Evaluate model performance using MSE and R² metrics.
+5.Use the trained model to predict salaries and evaluate using metrics like Mean Squared Error (MSE).
 
-step 6. Plot and visualize the decision tree structure.
 ## Program:
-```
-/*
-Program to implement the Decision Tree Regressor Model
-for Predicting the Salary of the Employee.
+
+Program to implement the Decision Tree Regressor Model for Predicting the Salary of the Employee.
+
 Developed by: HARISH RAGAV S
+
 RegisterNumber: 212222110013
-*/
-# Import necessary libraries
+
+```
 import pandas as pd
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
-from sklearn.tree import plot_tree
-
-# Load the dataset
-file_path = 'Salary.csv'
-data = pd.read_csv(file_path)
-
-# Prepare the input and output data
-X = data[['Level']]  # Independent variable (Level)
-y = data['Salary']   # Dependent variable (Salary)
-
-# Train the Decision Tree Regressor model
-model = DecisionTreeRegressor(random_state=0)
-model.fit(X, y)
-
-# Predict salaries for all levels
-y_pred = model.predict(X)
-
-# Add predictions to the dataframe
-data['Predicted Salary'] = y_pred
-
-# Display sample data with predictions
-# Formatting the display for a clear table output
-sample = data[['Position', 'Level', 'Salary', 'Predicted Salary']]
-print(sample.to_string(index=False))  # Ensures neat column alignment
-
-# Calculate and display performance metrics
-mse = mean_squared_error(y, y_pred)
-r2 = r2_score(y, y_pred)
-print(f"\nMean Squared Error: {mse}")
-print(f"R² Score: {r2}")
-
-# Visualize the Decision Tree
-plt.figure(figsize=(12, 8))
-plot_tree(model, feature_names=['Level'], filled=True, rounded=True, fontsize=10)
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+data = pd.read_csv("Salary.csv")
+data.head()
+data.info()
+data.isnull().sum()
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+data["Position"] = le.fit_transform(data["Position"])
+data.head()
+x=data[["Position","Level"]]
+y=data["Salary"]
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.2,random_state=2)
+from sklearn.tree import DecisionTreeRegressor
+dt=DecisionTreeRegressor()
+dt.fit(x_train,y_train)
+y_pred=dt.predict(x_test)
+from sklearn import metrics
+mse = metrics.mean_squared_error(y_test,y_pred)
+mse
+r2=metrics.r2_score(y_test,y_pred)
+r2
+dt.predict([[5,6]])
+plt.figure(figsize=(20, 8))
+plot_tree(dt, feature_names=x.columns, filled=True)
 plt.show()
 
 ```
-
 ## Output:
-![image](https://github.com/user-attachments/assets/7f678ad8-9516-471b-bd6b-aa727b4b0c88)
-![image](https://github.com/user-attachments/assets/0cd1d086-6952-4975-8e48-ec059b57fdf9)
+X Value:
 
+![image](https://github.com/user-attachments/assets/a385bb8e-641c-42f7-8c59-b0212586e350)
+
+Y Value:
+
+![image](https://github.com/user-attachments/assets/fe1dcf5a-f275-43ca-ad7a-c367fda1a18e)
+
+DecisionTree:
+
+![image](https://github.com/user-attachments/assets/739aa259-1e17-4814-a1db-c4e51b03bc51)
 
 
 
